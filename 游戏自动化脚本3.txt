@@ -1,0 +1,80 @@
+﻿Tap 840, 1560  
+//延迟2000毫秒（2秒） 
+Delay 2000
+TouchDown 919, 968, 1
+  
+//延迟2000毫秒（2秒）
+Delay 2000
+TouchMove 592, 974, 1
+TouchUp 1
+//延迟2000毫秒（2秒）
+Delay 2000
+Tap 570, 1095
+For 200
+	TracePrint "开始循环"
+Do
+//触发小游戏结算标识
+SetRowsNumber(33)
+SetOffsetInterval(1)
+TracePrint SetDictEx(0, "Attachment:mq_soft.txt")
+TracePrint UseDict(0)
+Dim ocrchar
+ocrchar=Ocr(193,1402,487,1449,"32C2FF|32C2FF|32C2FF|2FB5F9|32C1FE",1.0)
+Traceprint ocrchar
+Traceprint "没有找到触发小游戏标识"
+
+
+
+
+//自动游戏游戏结算标识
+SetRowsNumber(33)
+SetOffsetInterval(1)
+TracePrint SetDictEx(0, "Attachment:ling.txt")
+TracePrint UseDict(0)
+//以上两句脚本只需要调用一次
+Dim ling
+ling = Ocr(444, 1698, 483, 1750, "FFFFFF|FCFDFD|FFFFFF|FBFCFB|FDFDFD", 1.0)
+Traceprint ling
+Traceprint "自动游戏结算标识"
+
+
+
+If ocrchar = "小游戏" Then 
+//点击罐子 开始免费游戏
+Tap 714, 1101
+Delay  4000
+Tap 510,1185
+Delay 4000
+//点击继续窗口
+Tap	524,1188
+Delay 4000
+
+//  开始免费游戏
+Do
+// 免费游戏结算窗口
+SetRowsNumber(33)
+SetOffsetInterval(1)
+//注意：每次制作完字库后，需要自行把制作的字库文件添加到脚本"附件"中
+TracePrint SetDictEx(0, "Attachment:jiesuan.txt")
+TracePrint UseDict(0)
+//以上两句脚本只需要调用一次
+Dim S
+S=Ocr(288,1086,450,1143,"32C2FF|32C2FF|32C2FF",1.0)
+Traceprint S
+Traceprint "开启免费游戏"
+If S = "结算" Then 
+Tap 536,1250
+Delay 3000
+Exit Do
+End If
+Delay 1000
+Loop
+Exit Do
+End If
+//  自动游戏结束 GAME OVER
+If ling = "零" Then 
+Traceprint "自动游戏结束"		
+Exit For
+End If
+Loop
+Next
